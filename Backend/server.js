@@ -3,14 +3,13 @@ import cors from "cors";
 
 const app = express();
 
-// ✅ Allowed origins (local + production + preview)
+// ✅ Allow localhost + production + all vercel.app previews
 const allowedOrigins = [
-  "http://localhost:3000", // dev
-  "https://book-explorer-qr61.vercel.app", // production (final domain)
-  /\.vercel\.app$/ // regex → allow any vercel.app preview domain
+  "http://localhost:3000",
+  "https://book-explorer-qr61.vercel.app",
+  /\.vercel\.app$/ // regex: any vercel.app subdomain
 ];
 
-// ✅ CORS setup
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -23,18 +22,15 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 
 app.use(express.json());
 
-// Example API
 app.get("/api/books", (req, res) => {
   res.json({ message: "Books API working!" });
 });
 
-// ✅ Use Render's PORT
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
