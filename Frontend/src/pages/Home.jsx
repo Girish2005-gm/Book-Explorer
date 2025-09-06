@@ -29,8 +29,8 @@ export default function Home() {
       if (inStock) params.inStock = inStock;
       if (minPrice) params.minPrice = minPrice;
       if (maxPrice) params.maxPrice = maxPrice;
-
       const res = await axios.get(`${API_URL}/books`, { params });
+
       setBooks(res.data.data?.books || res.data.books || []);
       const totalCount = res.data.data?.pagination?.total ?? res.data.total ?? 0;
       setTotal(totalCount);
