@@ -3,18 +3,21 @@ import cors from "cors";
 
 const app = express();
 
-// ✅ Allowed origins list
+// ✅ Allowed origins (local + production + preview)
 const allowedOrigins = [
-  "http://localhost:3000", // local dev
-  "https://book-explorer-qr61.vercel.app", // final production
-  "https://book-explorer-qr61-dgrdoge8t-girishs-projects-6c8b3ef6.vercel.app" // preview deploy
+  "http://localhost:3000", // dev
+  "https://book-explorer-qr61.vercel.app", // production (final domain)
+  /\.vercel\.app$/ // regex → allow any vercel.app preview domain
 ];
 
 // ✅ CORS setup
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.some((o) => {
+        if (o instanceof RegExp) return o.test(origin);
+        return o === origin;
+      })) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -27,7 +30,7 @@ app.use(
 
 app.use(express.json());
 
-// Example route
+// Example API
 app.get("/api/books", (req, res) => {
   res.json({ message: "Books API working!" });
 });
