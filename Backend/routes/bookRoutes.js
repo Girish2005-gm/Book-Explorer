@@ -3,11 +3,7 @@ import { getBooks, getBookById } from "../controllers/bookController.js";
 
 const router = express.Router();
 
-// GET /api/books
-router.get("/", getBooks);
-
-// GET /api/books/:id
-router.get("/:id", getBookById);
-
+router.get("/", getBooks);       // GET /api/books
+router.get("/:id", getBookById); // GET /api/books/:id
 
 export default router;
