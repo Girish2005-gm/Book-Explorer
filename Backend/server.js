@@ -1,15 +1,24 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./db.js";
+import bookRoutes from "./routes/bookRoutes.js";
+import errorHandler from "./middleware/errorMiddleware.js";
 
+dotenv.config();
 const app = express();
 
-// ✅ Allow localhost + production + all vercel.app previews
+// ✅ Connect DB
+connectDB();
+
+// ✅ Allowed Origins
 const allowedOrigins = [
   "http://localhost:3000",
   "https://book-explorer-qr61.vercel.app",
-  /\.vercel\.app$/ // regex: any vercel.app subdomain
+  /\.vercel\.app$/, // all vercel.app subdomains
 ];
 
+// ✅ CORS Middleware
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -26,11 +35,20 @@ app.use(
   })
 );
 
+// ✅ Body parser
 app.use(express.json());
 
-app.get("/api/books", (req, res) => {
-  res.json({ message: "Books API working!" });
+// ✅ Routes
+app.use("/api/books", bookRoutes);
+
+// ✅ Health check
+app.get("/", (req, res) => {
+  res.json({ message: "📚 Book Explorer API is running!" });
 });
 
+// ✅ Error Middleware
+app.use(errorHandler);
+
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
