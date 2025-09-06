@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import connectDB from "./db.js";
+import connectDB from "./config/db.js";
 import bookRoutes from "./routes/bookRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
