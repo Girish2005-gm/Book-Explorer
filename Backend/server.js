@@ -1,30 +1,17 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 
-import connectDB from "./config/db.js";
-import bookRoutes from "./routes/bookRoutes.js";
-import errorHandler from "./middlewares/errorHandler.js";
-
-dotenv.config();
-connectDB();
-
 const app = express();
-
-// ✅ Enable CORS
+// Allow specific origin (your Vercel frontend)
 app.use(cors({
-  origin: "*", // or restrict to your frontend URL
+  origin: "https://book-explorer-qr61-dgrdoge8t-girishs-projects-6c8b3ef6.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
+  credentials: true
 }));
 
-app.use(express.json());
+// Your routes
+app.get("/api/books", (req, res) => {
+  res.json({ message: "Books API working!" });
+});
 
-// Routes
-app.use("/api/books", bookRoutes);
-
-// Error handler
-app.use(errorHandler);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(5000, () => console.log("Server running on port 5000"));
